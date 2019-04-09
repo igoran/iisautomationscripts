@@ -94,10 +94,18 @@ function AddWebApplication([string] $Name, [string] $PhysicalPath,[string] $Site
     #SetAcl -parentFolder $PhysicalPath -userName "IUSR" -rights ReadAndExecute;
 }
 
+function ConfigureWebServer
+{
+    #Enable Static and Dynamic Compression
+    Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter "system.webServer/urlCompression" -name "doDynamicCompression" -value "true";
+    Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter "system.webServer/urlCompression" -name "doStaticCompression" -value "true";
+}
+
 $webApplicationPath = Resolve-Path $webApplicationPath;
 
 if(Test-Path $webApplicationPath)
 {
+    ConfigureWebServer
     $appPoolName = ($webSiteName + "AppPool"); # Naming convention
     CleanUpWebSite -webSiteName $webSiteName
     CleanUpAppPool -webAppPoolName $appPoolName
