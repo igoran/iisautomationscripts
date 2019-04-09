@@ -104,8 +104,7 @@ function ConfigureWebServer
 $webApplicationPath = Resolve-Path $webApplicationPath;
 
 if(Test-Path $webApplicationPath)
-{
-    ConfigureWebServer
+{    
     $appPoolName = ($webSiteName + "AppPool"); # Naming convention
     CleanUpWebSite -webSiteName $webSiteName
     CleanUpAppPool -webAppPoolName $appPoolName
@@ -114,4 +113,6 @@ if(Test-Path $webApplicationPath)
     $webSitePath = Split-Path -Path $webApplicationPath -Parent
     AddWebSite -webSiteName $webSiteName -webApplicationRootPath $webSitePath -webAppPoolName $appPoolName;
     AddWebApplication -Name GLVWebApp -Site $webSiteName -PhysicalPath $webApplicationPath -ApplicationPool $appPoolName;
+
+    ConfigureWebServer
 }
